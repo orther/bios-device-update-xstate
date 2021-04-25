@@ -5,6 +5,14 @@ import {
 } from "xstate";
 import { bleDeviceSchema, bleDeviceModel } from "./device-update.machine.types";
 
+/**
+ * A "modern" sleep statement.
+ *
+ * @param ms The number of milliseconds to wait.
+ */
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 const forwardEventToParent = sendParent((_, event) => event);
 // const sendReportedState = sendParent((context, event) => event)
 
@@ -22,14 +30,9 @@ export const bleDeviceMachine = createMachine<typeof bleDeviceModel>(
     states: {
       idle: {
         // transient state => immediately moves to scanning
-        on: {
-          "": [
-            { target: "scanning" }
-            // { target: 'morning', cond: 'isBeforeNoon' },
-          ]
-        }
+        after: { 5000: [{ target: "scanning" }] }
+        // { target: 'morning', cond: 'isBeforeNoon' },
       },
-
       scanning: {
         meta: {
           description: "Scan for BLE device"
@@ -105,12 +108,14 @@ export const bleDeviceMachine = createMachine<typeof bleDeviceModel>(
         // ) {
         //   await ble.managerDeviceConnect(bleDevice.id);
         // }
-        return true;
+        await delay(5000);
+        // return true;
       },
       bleStartBootloader: async () => {
         // ble.deviceStartUpdateBootloader();
       },
       scanForBleDevice: async () => {
+        await delay(5000);
         // const bleDevice = await ble.scanForDevice(device.iotName, 30000);
         // if (ble.managerDeviceScanStatus === BleManagerDeviceScanStatus.Error) {
         //   throw new Error("device scan error");

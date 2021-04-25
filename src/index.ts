@@ -20,37 +20,12 @@ document.getElementById("app").innerHTML = `
 </section>
 `;
 
-// interface ToggleContext {
-//   count: number;
-// }
-//
-// // Edit your machine(s) here
-// const machine = Machine<ToggleContext>({
-//   id: "machine",
-//   initial: "inactive",
-//   context: {
-//     count: 0
-//   },
-//   states: {
-//     inactive: {
-//       on: { TOGGLE: "active" }
-//     },
-//     active: {
-//       on: { TOGGLE: "inactive" }
-//     }
-//   }
-// });
-
-// Edit your service(s) here
-// const service = interpret(machine, { devTools: true }).onTransition((state) => {
-//   console.log(state.value);
-// });
-
-const service = interpret(bleDeviceMachine, { devTools: true }).onTransition(
-  (state) => {
-    console.log(state.value);
-  }
-);
+const service = interpret(bleDeviceMachine, {
+  context: { deviceId: "12345" },
+  devTools: true
+}).onTransition((state) => {
+  console.log(state.value);
+});
 
 service.start();
 

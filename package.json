@@ -8,7 +8,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@xstate/inspect": "0.4.1",
+    "@xstate/inspect": "0.4.0",
     "xstate": "4.18.0"
   },
   "devDependencies": {
